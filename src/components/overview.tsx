@@ -6,6 +6,7 @@ import { money } from '@/lib/finance';
 import { useStore } from './store';
 import { PageHeading, PropertyCard } from './ui';
 import { AustraliaMap } from './australia-map';
+import { PublicMarket } from './public-market';
 export function Overview({ data }: { data: Dataset }) {
   const { state } = useStore();
   const pref = state.preferences;
@@ -122,10 +123,11 @@ export function Overview({ data }: { data: Dataset }) {
           </div>
         </section>
       </div>
+      <PublicMarket compact />
       <AustraliaMap data={data} />
       <section className="opportunities">
         <div className="section-head">
-          <h2>Worth researching now</h2>
+          <h2>Demo property opportunities</h2>
           <Link href="/discover">All {data.properties.length} sample listings ↗</Link>
         </div>
         {data.properties.slice(0, 3).map((p, i) => (

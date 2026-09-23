@@ -9,11 +9,11 @@ import {
   BriefcaseBusiness,
   Settings,
   Sparkles,
-  ArrowUpRight,
   X,
   Menu,
 } from 'lucide-react';
 import { useStore } from './store';
+import { ResearchAssistant } from './research-assistant';
 const nav = [
   { href: '/', label: 'Overview', Icon: LayoutGrid },
   { href: '/discover', label: 'Discover', Icon: Search },
@@ -25,9 +25,7 @@ export function Shell({ children }: { children: ReactNode }) {
   const path = usePathname(),
     router = useRouter();
   const [search, setSearch] = useState(''),
-    [menu, setMenu] = useState(false),
-    [question, setQuestion] = useState(''),
-    [answer, setAnswer] = useState('');
+    [menu, setMenu] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const { state, warning } = useStore();
   useEffect(() => {
@@ -40,6 +38,10 @@ export function Shell({ children }: { children: ReactNode }) {
     window.addEventListener('keydown', listener);
     return () => window.removeEventListener('keydown', listener);
   }, []);
+  useEffect(() => {
+    dialog.current?.close();
+    setMenu(false);
+  }, [path]);
   return (
     <div className="app">
       <a className="skip" href="#main">
@@ -67,11 +69,11 @@ export function Shell({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <div className="sample-dot">Demo workspace</div>
+          <div className="sample-dot">Research workspace</div>
           <p>
-            Sample snapshot · 23 Sep 2026
+            ABS public data · Beta
             <br />
-            No live feeds connected
+            Property listings remain demo
           </p>
           <div className="profile">
             <span>{state.preferences.name.slice(0, 1) || 'Z'}</span>
@@ -128,7 +130,7 @@ export function Shell({ children }: { children: ReactNode }) {
           )}
           {children}
           <footer>
-            Property OS <span>Illustrative data · AUD · Research workspace</span>
+            Property OS <span>ABS regional data + demo listings · AUD</span>
           </footer>
         </main>
       </div>
@@ -143,37 +145,7 @@ export function Shell({ children }: { children: ReactNode }) {
             <X size={20} />
           </button>
         </div>
-        <p className="tag">Demo · No AI model connected</p>
-        <p>
-          Use this space to organise your due diligence. This preview returns a fixed checklist; it
-          does not search or verify property data.
-        </p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setAnswer(
-              'Start with an independent rental appraisal, a written insurance quote, parcel-level flood and bushfire checks, and a building & pest report. Then update your cashflow assumptions. This is a fixed demonstration response, not a property assessment.',
-            );
-          }}
-        >
-          <label>
-            Your research question
-            <textarea
-              required
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder="What should I verify before an inspection?"
-            />
-          </label>
-          <button className="primary">
-            Show demo checklist <ArrowUpRight size={15} />
-          </button>
-        </form>
-        {answer && (
-          <div className="tint" role="status">
-            {answer}
-          </div>
-        )}
+        <ResearchAssistant key={path} />
       </dialog>
     </div>
   );

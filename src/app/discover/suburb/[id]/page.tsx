@@ -1,3 +1,5 @@
+import { PublicMarket } from '@/components/public-market';
+import { suburbRegions } from '@/lib/public-data';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getRepository } from '@/lib/repository';
@@ -21,9 +23,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle="Understand the suburb before you shortlist a property."
       />
       <div className="notice">
-        All indicators are illustrative fixtures as of 23 Sep 2026. No ABS or market provider
-        connected.
+        The suburb figures below are still illustrative. The separately sourced ABS panel covers the
+        broader region, not this suburb or an individual property.
       </div>
+      <PublicMarket regionId={suburbRegions[s.id]} />
       <div className="stat-grid">
         {[
           ['Median price', money(s.median)],

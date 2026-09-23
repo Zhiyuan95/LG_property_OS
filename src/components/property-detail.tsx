@@ -7,6 +7,8 @@ import { money, grossYield } from '@/lib/finance';
 import { useStore } from './store';
 import { PageHeading } from './ui';
 import { Financials } from './financials';
+import { PublicMarket } from './public-market';
+import { suburbRegions } from '@/lib/public-data';
 const tabs = ['Overview', 'Financials', 'Market', 'Risks', 'Research'];
 export function PropertyDetail({
   data,
@@ -124,6 +126,7 @@ export function PropertyDetail({
         </>
       )}
       {tab === 'Financials' && <Financials property={p} />}
+      {tab === 'Market' && <PublicMarket regionId={suburbRegions[s.id]} />}
       {tab === 'Market' && (
         <section className="panel">
           <h2>{s.name} at a glance</h2>

@@ -1365,3 +1365,132 @@ footer {
     visibility: visible;
   }
 }
+.source-meta {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 11px;
+  margin: 14px 0;
+}
+.source-warning {
+  border: 1px solid #e4d5b5;
+  background: #faf4e6;
+  padding: 11px 14px;
+  border-radius: 8px;
+  margin: 16px 0;
+  color: #73541f;
+  font-size: 12px;
+}
+.source-warning summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+.source-warning p:last-child {
+  margin-bottom: 3px;
+}
+.source-links {
+  margin: 18px 0 0;
+  flex-wrap: wrap;
+}
+.source-links a {
+  font-size: 11px;
+}
+.data-mode {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+.quarter-history {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 18px 0;
+}
+.quarter-history > div {
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.quarter-history span,
+.quarter-history small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.quarter-history strong {
+  font: 15px var(--mono);
+}
+.history-title {
+  margin-top: 25px;
+}
+.answer-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+.research-answer {
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+  padding-top: 15px;
+}
+.research-answer h3 {
+  margin-top: 20px;
+}
+.research-answer li {
+  font-size: 12px;
+}
+.research-answer details {
+  font-size: 11px;
+  color: var(--muted);
+}
+.assistant {
+  max-height: 85vh;
+  overflow-y: auto;
+  width: min(700px, calc(100% - 32px));
+}
+.public-market .tag.amber {
+  white-space: normal;
+  max-width: 190px;
+}
+.public-market td {
+  vertical-align: top;
+}
+.public-market .mono {
+  font-size: 12px;
+}
+@media (max-width: 640px) {
+  .quarter-history {
+    grid-template-columns: 1fr 1fr;
+  }
+  .source-meta {
+    gap: 7px;
+    flex-direction: column;
+  }
+  .public-market .section-head {
+    align-items: flex-start;
+  }
+  .data-mode .button {
+    font-size: 12px;
+  }
+}
+.public-market th {
+  white-space: normal;
+  min-width: 92px;
+}
+.public-market th:first-child {
+  min-width: 160px;
+}
+.public-market .tag.amber {
+  white-space: nowrap;
+}
+.public-market td {
+  padding: 15px 10px;
+}
+.public-market th {
+  padding: 12px 10px;
+}

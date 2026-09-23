@@ -1,5 +1,7 @@
 # 数据与扩展设计
 
+版本 0.2 已实现 ABS 区域数据和 OpenAI 研究。新增 `public-data.ts` DTO、`abs-parser.ts` 元数据解析、`abs-client.ts` 缓存、`research.ts` 模型服务及 `/api/regions`、`/api/research`、`/api/connections`。详细现状见 `live-integrations.md`。下述 PropertyRepository 和数据库规划仍适用于尚未接入的单套真实房源。
+
 ## 现有边界
 
 Server Components → `getRepository(): PropertyRepository` → mock adapter → serializable typed DTO → client components。
@@ -38,7 +40,7 @@ Server Components → `getRepository(): PropertyRepository` → mock adapter →
 
 ## AI agent
 
-当前 `shell.tsx` 的固定 demo checklist 只是交互入口。下一阶段把提交转到服务端 `/api/research`，接入研究服务接口：输入 property ID、问题、授权的数据工具集合；输出结论、引用/观测 ID、未知项、创建时间和模型版本。
+`research-assistant.tsx` 已调用服务端 `/api/research`：输入问题及可选 region/property ID；服务端取得 ABS 证据并调用 OpenAI Responses API，输出结论、引用/观测 ID、未知项、创建时间、模型和 token 用量。示例 property context 明确标为虚构。尚未实现自主工具执行、多轮历史或数据库保存。
 
 Agent 只能通过服务层读取规范化数据；工具输出和网页内容都不可信。为工具白名单、超时、费用、请求频率和工作区权限设限制。将对外联系、订阅数据、创建支出和任何买卖操作与研究回答分开并显式授权。研究结果不可自动把风险从 unknown 改成 verified，除非有可追溯证据和清晰审核规则。
 

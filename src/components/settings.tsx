@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { initialState, isUserState } from '@/lib/user-state';
 import { useStore } from './store';
 import { PageHeading } from './ui';
+import { Connections } from './connections';
 export function Settings() {
   const { state, ready, update } = useStore();
   const [message, setMessage] = useState(''),
@@ -150,25 +151,7 @@ export function Settings() {
         </section>
       </div>
       <p role="status">{message}</p>
-      <section className="panel">
-        <h2>Data connections</h2>
-        <p className="muted">
-          Future integration points. No credentials or live connections are configured in this
-          version.
-        </p>
-        {[
-          'Domain / PropTrack — listings & transactions',
-          'ABS — demographic indicators',
-          'State & local government — hazards & planning',
-          'PostgreSQL / PostGIS — durable records & spatial queries',
-          'AI agent — sourced research & tool execution',
-        ].map((s) => (
-          <div className="risk-row" key={s}>
-            <span>{s}</span>
-            <span className="tag neutral">Not connected</span>
-          </div>
-        ))}
-      </section>
+      <Connections />
     </>
   );
 }

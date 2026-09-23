@@ -2,7 +2,15 @@
 
 可自行维护的澳大利亚投资房研究 App 源码。React + Next.js App Router + TypeScript，Node.js runtime。
 
-第一阶段是**能运行、能操作的 mock 数据版本**。不接真实房产数据、不调用 AI、不需要 API key，不包含登录或多人协作。页面用英文延续原稿，维护文档使用中文。
+当前为 **公共区域数据 + OpenAI 研究版（0.2）**。Discover 默认读取 ABS 官方 Data API；Ask AI 通过服务端调用 OpenAI Responses API，需要用户自己的 API key。单套房源、租金、风险评分和 suburb 示例仍是 mock，界面明确区分。没有登录或多人协作。页面延续原稿，维护文档使用中文。
+
+### 本次升级的使用入口
+
+本次运行于 http://127.0.0.1:3002 ，因为 3000 已被旧服务占用。在 Settings → Data & AI connections 输入 API key 并保存，然后打开区域详情并点击 Ask AI。不要在聊天、代码或源码压缩包里放密钥。保存 key 不发起收费调用；发送研究问题会产生 OpenAI API 用量。
+
+如果要保留旧版 3000 端口里的研究笔记，请先在旧版 Settings 导出 JSON，再在 3002 的 Settings 恢复。同一浏览器的不同端口使用不同 localStorage。
+
+ABS 接入范围、来源质量标记、AI 连接及错误排查见 [数据与 AI 接入说明](docs/live-integrations.md)。
 
 ## 本地运行
 
@@ -30,7 +38,7 @@ pnpm format:check   # 只检查格式
 
 项目包含 `pnpm-lock.yaml`，请保留并提交。依赖版本以锁文件为准。也可以使用 npm install / npm run dev，但请在团队内统一包管理器并重新生成、维护对应的锁文件。Next.js 的运行要求见 [官方安装文档](https://nextjs.org/docs/app/getting-started/installation)。
 
-默认无需 `.env`。如需显式配置，复制 `.env.example` 为 `.env.local`；当前唯一支持的 `PROPERTY_DATA_PROVIDER` 是 `mock`，其他值会主动报错，避免悄悄退回假数据。
+公共 ABS 数据无需 key。OpenAI key 可在本地 Settings 保存至 `.env.local`，也可手动复制 `.env.example` 为 `.env.local` 并填写 `OPENAI_API_KEY` / `OPENAI_MODEL` 后重启。默认模型 `gpt-5-mini`，可改成账户支持且兼容 Responses structured output 的模型。`PROPERTY_DATA_PROVIDER=mock` 仅控制单套房源；公共区域数据走独立 ABS adapter，失败不会回退到 mock。
 
 ## 页面与交互
 
@@ -44,7 +52,7 @@ pnpm format:check   # 只检查格式
 | Portfolio            | 汇总标记为 Purchased 的房源，初始为空；金额明确是示例 asking price 而非真实资产估值      |
 | Settings             | 修改称呼和 Buy Box；JSON 导出/恢复；重置演示状态；连接状态说明                           |
 
-全局搜索会跳转至 Discover；Ask AI 按钮和 Ctrl/Cmd+K 打开助手弹窗。助手明确标示为**固定演示回复，没有接入模型**。风险、财务试算、AI 都没有独立一级导航。
+全局地址搜索会跳转至示例房源列表；Discover 的 Public regional data 提供公共区域搜索。Ask AI 按钮和 Ctrl/Cmd+K 打开真实模型入口，使用当前区域公开数据和来源标记作为证据，返回回答、待核实项及来源卡片。未配置 key 时明确提示，不再生成固定回复。风险、财务试算、AI 都没有独立一级导航。
 
 研究笔记、清单勾选、投资阶段、手动 Timeline、用户设置保存于当前浏览器的 localStorage。备份入口位于 Settings。切换浏览器、端口或设备不会自动同步；多人/跨设备持久化属于下一阶段。多个标签页不要同时编辑同一个本地 workspace，以最后保存的内容为准。
 
@@ -122,6 +130,6 @@ grossYield = weeklyRent × 52 / price × 100
 
 ## 当前边界
 
-没有真实成交/租金/风险 API、自动更新、定时任务、真实 AI 对话、身份认证或后台数据库；没有导入真实房源的入口。评分为固定示例，并非算法输出。风险显示未验证。Portfolio 尚未包含租约、实际购买成本和交易台账。
+已接入 ABS 区域成交统计和 OpenAI 服务端研究接口。尚无实时单套挂牌、租金/空置率/风险图层 API、定时后台任务、身份认证或数据库。ABS 缓存为单进程内存，重启后重新获取；研究对话目前不保存历史。模型不会浏览网页、联系中介或执行交易。评分仍为示例，风险未验证，Portfolio 尚无真实租约/成本台账。首次真实 OpenAI 成功调用取决于用户配置有效 key、API 额度与模型权限。
 
 这是本地单用户研究原型，不是可以直接开放给公众的多租户系统。要上线真实数据版本，先按 `docs/architecture.md` 接入鉴权、持久化、数据来源和授权，再部署 Node.js 服务。
