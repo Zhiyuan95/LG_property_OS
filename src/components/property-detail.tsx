@@ -35,10 +35,10 @@ export function PropertyDetail({
       <PageHeading
         eyebrow={`${s.name.toUpperCase()} · ${s.state} ${s.postcode}`}
         title={p.address}
-        subtitle={`House · ${p.beds} bedrooms · ${p.land} m² · ${p.days} sample days on market`}
+        subtitle={`${p.propertyType ?? 'Unknown type'} · ${p.beds} beds · ${p.baths ?? 'Unknown'} baths · ${p.carSpaces ?? 'Unknown'} parking · ${p.land} m² · DEMO`}
         action={
           <div className="inline">
-            <span className="tag neutral">{p.status}</span>
+            <span className="tag neutral">Demo status: {p.status}</span>
             <label className="sr-only" htmlFor="stage">
               Pipeline stage
             </label>

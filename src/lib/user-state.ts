@@ -1,4 +1,5 @@
 import { stages, type UserState } from './types';
+import { isBuyBox } from './buy-box';
 export const storageKey = 'property-os:user:v1';
 export const initialState: UserState = {
   version: 1,
@@ -45,6 +46,7 @@ export function isUserState(value: unknown): value is UserState {
       (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0,
     ) &&
     s.preferences.minPrice <= s.preferences.maxPrice &&
-    s.preferences.minYield <= 100
+    s.preferences.minYield <= 100 &&
+    (s.preferences.buyBox === undefined || isBuyBox(s.preferences.buyBox))
   );
 }

@@ -4,6 +4,7 @@ import { initialState, isUserState } from '@/lib/user-state';
 import { useStore } from './store';
 import { PageHeading } from './ui';
 import { Connections } from './connections';
+import { BuyBoxForm } from './buy-box-form';
 export function Settings() {
   const { state, ready, update } = useStore();
   const [message, setMessage] = useState(''),
@@ -15,74 +16,7 @@ export function Settings() {
         subtitle="Shape your Buy Box and keep control of your research data."
       />
       <div className="two-col">
-        <section className="panel">
-          <h2>Profile & Buy Box</h2>
-          <form
-            key={JSON.stringify(state.preferences)}
-            onSubmit={(e) => {
-              e.preventDefault();
-              const f = new FormData(e.currentTarget);
-              const preferences = {
-                name: String(f.get('name')).trim(),
-                minPrice: Number(f.get('minPrice')),
-                maxPrice: Number(f.get('maxPrice')),
-                minYield: Number(f.get('minYield')),
-              };
-              if (!preferences.name || !isUserState({ ...state, preferences })) {
-                setMessage(
-                  'Check the name and price range. Minimum price must not exceed maximum.',
-                );
-                return;
-              }
-              update((s) => ({ ...s, preferences }));
-              setMessage('Buy Box saved. Apply it in Discover.');
-            }}
-          >
-            <label>
-              Display name
-              <input required maxLength={40} name="name" defaultValue={state.preferences.name} />
-            </label>
-            <div className="form-grid">
-              <label>
-                Minimum price (AUD)
-                <input
-                  required
-                  type="number"
-                  min="0"
-                  step="1000"
-                  name="minPrice"
-                  defaultValue={state.preferences.minPrice}
-                />
-              </label>
-              <label>
-                Maximum price (AUD)
-                <input
-                  required
-                  type="number"
-                  min="0"
-                  step="1000"
-                  name="maxPrice"
-                  defaultValue={state.preferences.maxPrice}
-                />
-              </label>
-            </div>
-            <label>
-              Minimum gross yield (%)
-              <input
-                required
-                type="number"
-                min="0"
-                max="100"
-                step="0.1"
-                name="minYield"
-                defaultValue={state.preferences.minYield}
-              />
-            </label>
-            <button disabled={!ready} className="primary">
-              Save preferences
-            </button>
-          </form>
-        </section>
+        <BuyBoxForm profile />
         <section className="panel">
           <h2>Your workspace data</h2>
           <p>

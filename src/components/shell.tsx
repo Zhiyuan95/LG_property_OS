@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   LayoutGrid,
@@ -22,10 +22,8 @@ const nav = [
   { href: '/settings', label: 'Settings', Icon: Settings },
 ];
 export function Shell({ children }: { children: ReactNode }) {
-  const path = usePathname(),
-    router = useRouter();
-  const [search, setSearch] = useState(''),
-    [menu, setMenu] = useState(false);
+  const path = usePathname();
+  const [menu, setMenu] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const { state, warning } = useStore();
   useEffect(() => {
@@ -101,22 +99,10 @@ export function Shell({ children }: { children: ReactNode }) {
                   .map((x) => x.charAt(0).toUpperCase() + x.slice(1))
                   .join(' / ')}
           </span>
-          <form
-            className="search"
-            onSubmit={(e) => {
-              e.preventDefault();
-              router.push('/discover?q=' + encodeURIComponent(search));
-            }}
-          >
+          <Link className="button" href="/discover">
             <Search size={17} />
-            <input
-              aria-label="Search suburb or address"
-              placeholder="Search a suburb or address…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <kbd>↵</kbd>
-          </form>
+            Property search & Buy Box
+          </Link>
           <button className="ai-button" onClick={() => dialog.current?.showModal()}>
             <Sparkles size={16} />
             Ask AI <kbd>⌘K</kbd>
@@ -128,6 +114,11 @@ export function Shell({ children }: { children: ReactNode }) {
               {warning}
             </p>
           )}
+          <div className="notice source-banner">
+            <strong>Live property listings are not connected.</strong> All in-app property
+            addresses, prices, sale statuses and timelines are fictional demo data. ABS supplies
+            regional statistics only. <Link href="/discover">Property search status →</Link>
+          </div>
           {children}
           <footer>
             Property OS <span>ABS regional data + demo listings · AUD</span>

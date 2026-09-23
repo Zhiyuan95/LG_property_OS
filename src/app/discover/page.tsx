@@ -3,17 +3,22 @@ import { Discover } from '@/components/discover';
 import { PublicMarket } from '@/components/public-market';
 import { PageHeading } from '@/components/ui';
 import Link from 'next/link';
+import { PropertySearch } from '@/components/property-search';
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string; view?: string }>;
 }) {
   const { q, view } = await searchParams;
-  const demo = view === 'demo' || q !== undefined;
+  const demo = view === 'demo';
+  const regions = view === 'regions';
   return (
     <>
       <div className="data-mode">
-        <Link className={!demo ? 'button primary' : 'button'} href="/discover">
+        <Link className={!demo && !regions ? 'button primary' : 'button'} href="/discover">
+          Property search & Buy Box
+        </Link>
+        <Link className={regions ? 'button primary' : 'button'} href="/discover?view=regions">
           Public regional data
         </Link>
         <Link className={demo ? 'button primary' : 'button'} href="/discover?view=demo">
@@ -22,7 +27,7 @@ export default async function Page({
       </div>
       {demo ? (
         <Discover key={q ?? ''} data={await getRepository().snapshot()} query={q ?? ''} />
-      ) : (
+      ) : regions ? (
         <>
           <PageHeading
             eyebrow="DISCOVER / AUSTRALIA"
@@ -31,6 +36,8 @@ export default async function Page({
           />
           <PublicMarket />
         </>
+      ) : (
+        <PropertySearch />
       )}
     </>
   );

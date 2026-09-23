@@ -2,7 +2,9 @@
 
 可自行维护的澳大利亚投资房研究 App 源码。React + Next.js App Router + TypeScript，Node.js runtime。
 
-当前为 **公共区域数据 + OpenAI 研究版（0.2）**。Discover 默认读取 ABS 官方 Data API；Ask AI 通过服务端调用 OpenAI Responses API，需要用户自己的 API key。单套房源、租金、风险评分和 suburb 示例仍是 mock，界面明确区分。没有登录或多人协作。页面延续原稿，维护文档使用中文。
+当前为 **公共区域数据 + OpenAI 研究版（0.2）**。Discover 默认进入房源搜索与完整 Buy Box；ABS 官方区域统计在 Public regional data 标签中。真实房源数据源尚未连接，手动扫描不可用，自动扫描尚未实现。Ask AI 通过服务端调用 OpenAI Responses API，需要用户自己的 API key。单套房源、租金、风险评分和 suburb 示例仍是 mock，界面明确区分。没有登录或多人协作。页面延续原稿，维护文档使用中文。
+
+Buy Box 和房源搜索的当前能力、演示数据边界及后续接入工作见 [房源搜索说明](docs/property-search.md)。
 
 ### 本次升级的使用入口
 

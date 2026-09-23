@@ -6,12 +6,13 @@ import { grossYield, money } from '@/lib/finance';
 import { useStore } from './store';
 import { PageHeading } from './ui';
 import { AustraliaMap } from './australia-map';
+import { matchesBuyBox } from '@/lib/buy-box';
 export function Discover({ data, query }: { data: Dataset; query: string }) {
   const { state, ready, setStage } = useStore();
   const [q, setQ] = useState(query),
     [region, setRegion] = useState('All'),
     [sort, setSort] = useState('score'),
-    [buybox, setBuybox] = useState(false),
+    [buybox, setBuybox] = useState(true),
     [view, setView] = useState('list');
   const rows = data.properties
     .filter((p) => {
@@ -19,10 +20,7 @@ export function Discover({ data, query }: { data: Dataset; query: string }) {
       return (
         `${p.address} ${s.name} ${s.state}`.toLowerCase().includes(q.toLowerCase()) &&
         (region === 'All' || s.state === region) &&
-        (!buybox ||
-          (p.price >= state.preferences.minPrice &&
-            p.price <= state.preferences.maxPrice &&
-            grossYield(p.price, p.rent) >= state.preferences.minYield))
+        (!buybox || matchesBuyBox(p, s, state.preferences))
       );
     })
     .sort((a, b) =>
@@ -36,14 +34,17 @@ export function Discover({ data, query }: { data: Dataset; query: string }) {
     <>
       <PageHeading
         eyebrow="DISCOVER / AUSTRALIA"
-        title="Find your next investment"
-        subtitle="Start across Australia. Follow the evidence into a suburb, then a property."
+        title="Demo listings · fictional properties"
+        subtitle="Test the research workflow only. These addresses, prices and statuses are not verified listings."
       />
       <div className="notice">
         Demo dataset · {data.properties.length} fictional listings across {data.suburbs.length}{' '}
         suburbs. No live listing feed.
       </div>
       <section className="panel">
+        <p>
+          <Link href="/discover#buy-box">Edit the full Buy Box →</Link>
+        </p>
         <div className="filters">
           <label>
             Suburb or address
@@ -71,7 +72,7 @@ export function Discover({ data, query }: { data: Dataset; query: string }) {
           </label>
           <label className="check">
             <input type="checkbox" checked={buybox} onChange={(e) => setBuybox(e.target.checked)} />
-            Apply my Buy Box
+            Apply saved Buy Box to demo data
           </label>
         </div>
         <div className="section-head">
@@ -87,7 +88,10 @@ export function Discover({ data, query }: { data: Dataset; query: string }) {
         {rows.length === 0 ? (
           <div className="empty">
             <h2>No matching sample listings</h2>
-            <p>Try another state or broaden your Buy Box.</p>
+            <p>
+              Unknown bathrooms, parking or garage values cannot pass an active minimum. Edit your
+              Buy Box or turn it off to explore the fixtures.
+            </p>
             <button
               onClick={() => {
                 setQ('');
@@ -112,6 +116,7 @@ export function Discover({ data, query }: { data: Dataset; query: string }) {
               <thead>
                 <tr>
                   <th>Property / suburb</th>
+                  <th>Type / beds / baths / parking</th>
                   <th>Asking price</th>
                   <th>Gross yield</th>
                   <th>Score*</th>
@@ -131,6 +136,10 @@ export function Discover({ data, query }: { data: Dataset; query: string }) {
                         <Link className="suburb-link" href={'/discover/suburb/' + s.id}>
                           {s.name}, {s.state} ↗
                         </Link>
+                      </td>
+                      <td>
+                        {p.propertyType ?? 'Unknown'} · {p.beds} beds · {p.baths ?? '?'} baths ·{' '}
+                        {p.carSpaces ?? '?'} parking
                       </td>
                       <td className="mono">{money(p.price)}</td>
                       <td className="mono">{grossYield(p.price, p.rent).toFixed(2)}%</td>

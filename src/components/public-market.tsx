@@ -57,7 +57,9 @@ export function PublicMarket({
         <div>
           <p className="eyebrow">PUBLIC REGIONAL DATA</p>
           <h2>
-            {regionId ? (regions[0]?.[1] ?? 'Regional market context') : 'Australia market scanner'}
+            {regionId
+              ? (regions[0]?.[1] ?? 'Regional market context')
+              : 'Regional housing statistics'}
           </h2>
         </div>
         <div className="inline">
@@ -172,7 +174,7 @@ export function PublicMarket({
             >
               Cross-check ABS release ↗
             </a>
-            {compact && <Link href="/discover">Explore all regions →</Link>}
+            {compact && <Link href="/discover?view=regions">Explore all regions →</Link>}
           </div>
         </>
       )}

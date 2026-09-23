@@ -32,6 +32,10 @@ export interface Property {
   price: number;
   rent: number;
   beds: number;
+  propertyType?: PropertyType;
+  baths?: number;
+  carSpaces?: number;
+  garageSpaces?: number;
   land: number;
   score: number;
   days: number;
@@ -52,6 +56,31 @@ export interface Preferences {
   minPrice: number;
   maxPrice: number;
   minYield: number;
+  buyBox?: BuyBox;
+}
+export const propertyTypes = [
+  'House',
+  'Apartment / unit',
+  'Townhouse',
+  'Villa',
+  'Duplex',
+  'Acreage',
+  'Land',
+] as const;
+export type PropertyType = (typeof propertyTypes)[number];
+export const stateCodes: StateCode[] = ['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
+export interface BuyBox {
+  propertyTypes: PropertyType[];
+  states: StateCode[];
+  suburbs: string;
+  minBeds: number;
+  maxBeds: number | null;
+  minBaths: number;
+  minCarSpaces: number;
+  minGarageSpaces: number;
+  minLand: number;
+  maxLand: number | null;
+  excludeUnderOffer: boolean;
 }
 export interface UserState {
   version: 1;
