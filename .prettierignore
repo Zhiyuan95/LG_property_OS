@@ -1,0 +1,7 @@
+node_modules
+.next
+pnpm-lock.yaml
+public
+src/app/fonts.css
+next-env.d.ts
+*.tsbuildinfo
